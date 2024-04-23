@@ -47,10 +47,13 @@ void loop() {
   Serial.println(" cm");
   delay(1000);
 
-  if (distance <= 7)
-  {
-    myStepper.step(-2 * stepsPerRevolution); // 정방향으로 1회전
-    delay(3000); // 3초 대기
-    myStepper.step(2 * stepsPerRevolution); // 역방향으로 1회전
+ if (distance <= 8)
+ {  // 버스 감지 거리 설정
+    BTSerial.println("Stop"); // "Stop" 메시지 전송
+    myStepper.step(-2 * stepsPerRevolution); // 문을 닫음
+    delay(3000); // 문이 닫히는 시간 대기
+    myStepper.step(2 * stepsPerRevolution); // 문을 다시 염
+    BTSerial.println("Go"); // "Go" 메시지 전송
   }
 }
+
