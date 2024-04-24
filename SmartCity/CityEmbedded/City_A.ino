@@ -1,101 +1,96 @@
-#include <Servo.h> 
+#include <DS1302.h>
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
 
-// Pin definitions
-const int trigPin1 = 2; // Trigger pin of ultrasonic sensor 1
-const int echoPin1 = 3; // Echo pin of ultrasonic sensor 1
-const int trigPin2 = 4; // Trigger pin of ultrasonic sensor 2
-const int echoPin2 = 5; // Echo pin of ultrasonic sensor 2
-const int SERVO_PIN = 10; // Servo motor pin
-const int R_LED = 11; // Red LED pin
-const int G_LED = 12; // Green LED pin
-const int B_LED = 13; // Blue LED pin
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+DS1302 rtc(2, 4, 5);
 
-const float sensorDistance = 10.0; // Distance between ultrasonic sensors in cm
-Servo servo; // Servo object
+int lastSecond = -1;
+int lastMinute = -1;
+int lastHour = -1;
+int lastDate = -1;
+int lastMonth = -1;
+int lastYear = -1;
+int speakerPin = 3;
+int numTones = 3;
+
+// Shift register
+int latch = 8;
+int clock = 9;
+int data = 10;
 
 void setup() {
-  pinMode(trigPin1, OUTPUT);
-  pinMode(echoPin1, INPUT);
-  pinMode(trigPin2, OUTPUT);
-  pinMode(echoPin2, INPUT);
-
-  pinMode(R_LED, OUTPUT);
-  pinMode(G_LED, OUTPUT);
-  pinMode(B_LED, OUTPUT);
-  
-  servo.attach(SERVO_PIN);
   Serial.begin(9600);
+  pinMode(latch, OUTPUT);
+  pinMode(clock, OUTPUT);
+  pinMode(data, OUTPUT);
+  lcd.init();
+  lcd.backlight();
+  rtc.writeProtect(false);
+  rtc.halt(false);
+  Time datetime(2024, 4, 22, 19, 59, 57, 1);
+  rtc.time(datetime);
+  lcd.clear();
 }
 
 void loop() {
-  if (Serial.available() > 0) {
-    String inputString = Serial.readStringUntil('\n'); // Read the input until newline
-    inputString.trim(); // Remove any whitespace
+  Time t = rtc.time();
+  updateDateTime(t);
+  if (t.sec == 0 && lastMinute != t.min) {  // Check if it's the top of the hour
+    schoolBell();  // Ring the bell every hour
+  }
 
-    if (inputString.endsWith("d")) { // Check if the string ends with 'd'
-      int pos = inputString.toInt(); // Extract the number from the string
-      if (pos >= 0 && pos <= 180) {
-        servo.write(pos); // Move servo to the specified angle
-        Serial.print("Servo moved to ");
-        Serial.print(pos);
-        Serial.println(" degrees.");
-      } else {
-        Serial.println("Invalid degree input. Enter a value between 0 and 180.");
-      }
-    } else {
-      controlLED(inputString);
+  if (Serial.available() > 0) {
+    char receivedChar = Serial.read();  // Receive serial input
+    if (receivedChar == 's') {
+      schoolBell();  // Ring the bell when 's' is pressed
     }
   }
 
-  measureSpeed(); // Measure speed
+  digitalWrite(latch, LOW);
+  shiftOut(data, clock, MSBFIRST, B11111111);
+  digitalWrite(latch, HIGH);
+  delay(200);  // Delay for updating time
 }
 
-void controlLED(String command) {
-  if (command == "0") {
-    digitalWrite(R_LED, HIGH);
-    digitalWrite(G_LED, LOW);
-    digitalWrite(B_LED, HIGH);
-    Serial.println("The trash can is empty.");
-  } else if (command == "1") {
-    digitalWrite(R_LED, LOW);
-    digitalWrite(G_LED, LOW);
-    digitalWrite(B_LED, HIGH);
-    Serial.println("There is trash.");
-  } else if (command == "2") {
-    digitalWrite(R_LED, LOW);
-    digitalWrite(G_LED, HIGH);
-    digitalWrite(B_LED, HIGH);
-    Serial.println("The trash can is full.");
-  } else {
-    Serial.println("Not a command !!");
+void schoolBell() {
+  tone(speakerPin, 261); delay(800);
+  tone(speakerPin, 329); delay(300);
+  tone(speakerPin, 391); delay(800);
+  tone(speakerPin, 440); delay(250);
+  tone(speakerPin, 391); delay(300);
+  tone(speakerPin, 349); delay(300);
+  tone(speakerPin, 440); delay(300);
+  tone(speakerPin, 391); delay(800);
+  tone(speakerPin, 349); delay(800);
+  tone(speakerPin, 391); delay(300);
+  tone(speakerPin, 329); delay(800);
+  tone(speakerPin, 261); delay(300);
+  tone(speakerPin, 294); delay(500);
+  tone(speakerPin, 329); delay(500);
+  tone(speakerPin, 261); delay(300);
+  noTone(speakerPin);
+}
+
+void updateDateTime(const Time& t) {
+  if (lastYear != t.yr || lastMonth != t.mon || lastDate != t.date) {
+    lastYear = t.yr;
+    lastMonth = t.mon;
+    lastDate = t.date;
+    char dateBuffer[11];
+    sprintf(dateBuffer, "%04d-%02d-%02d", t.yr, t.mon, t.date);
+    lcd.setCursor(0, 0);
+    lcd.print(dateBuffer);
   }
-}
 
-void measureSpeed() {
-  float distance1 = get_distance(trigPin1, echoPin1);
-  float distance2 = get_distance(trigPin2, echoPin2);
-
-  if (distance1 < 5 && distance2 < 5) { // Both sensors detect an object
-    unsigned long startMillis = millis();
-    while (get_distance(trigPin2, echoPin2) < 5) {} // Wait until the object passes
-    float timeTaken = (millis() - startMillis) / 1000.0; // Time measurement
-
-    float velocity = sensorDistance / timeTaken; // Calculate velocity
-    Serial.print("Velocity: ");
-    Serial.print(velocity, 2);
-    Serial.println(" m/s");
+  if (lastHour != t.hr || lastMinute != t.min || lastSecond != t.sec) {
+    lastHour = t.hr;
+    lastMinute = t.min;
+    lastSecond = t.sec;
+    char timeBuffer[9];
+    sprintf(timeBuffer, "%02d:%02d:%02d", t.hr, t.min, t.sec);
+    lcd.setCursor(0, 1);
+    lcd.print(timeBuffer);
   }
-}
-
-float get_distance(int trigPin, int echoPin) {
-  long duration;
-  digitalWrite(trigPin, LOW);
-  delayMicroseconds(2);
-  digitalWrite(trigPin, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(trigPin, LOW);
-
-  duration = pulseIn(echoPin, HIGH);
-  float distance = duration * 17 / 1000; // Calculate the distance
-  return distance;
+  lastMinute = t.min;  // Update previous minute
 }
