@@ -2,8 +2,8 @@
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 
-LiquidCrystal_I2C lcd(0x27, 16, 2);
-DS1302 rtc(2, 4, 5);
+LiquidCrystal_I2C lcd(0x27, 16, 2);  // Initialize the LCD
+DS1302 rtc(2, 4, 5);  // Initialize the RTC (Real Time Clock)
 
 int lastSecond = -1;
 int lastMinute = -1;
@@ -11,10 +11,10 @@ int lastHour = -1;
 int lastDate = -1;
 int lastMonth = -1;
 int lastYear = -1;
-int speakerPin = 3;
-int numTones = 3;
+int speakerPin = 7;
+int numTones = 7;
 
-// Shift register
+// Shift register pins
 int latch = 8;
 int clock = 9;
 int data = 10;
@@ -28,7 +28,7 @@ void setup() {
   lcd.backlight();
   rtc.writeProtect(false);
   rtc.halt(false);
-  Time datetime(2024, 4, 22, 19, 59, 57, 1);
+  Time datetime(2024, 4, 22, 19, 59, 57, 1);  // Set initial date and time
   rtc.time(datetime);
   lcd.clear();
 }
@@ -37,23 +37,24 @@ void loop() {
   Time t = rtc.time();
   updateDateTime(t);
   if (t.sec == 0 && lastMinute != t.min) {  // Check if it's the top of the hour
-    schoolBell();  // Ring the bell every hour
+    schoolBell();  // Ring the bell at the start of each hour
   }
 
   if (Serial.available() > 0) {
-    char receivedChar = Serial.read();  // Receive serial input
+    char receivedChar = Serial.read();  // Read from serial input
     if (receivedChar == 's') {
-      schoolBell();  // Ring the bell when 's' is pressed
+      schoolBell();  // Ring the bell when 's' is entered
     }
   }
 
   digitalWrite(latch, LOW);
   shiftOut(data, clock, MSBFIRST, B11111111);
   digitalWrite(latch, HIGH);
-  delay(200);  // Delay for updating time
+  delay(200);  // Delay to refresh time display
 }
 
 void schoolBell() {
+  Serial.println("schoolBell started");  // Notify that the function has started
   tone(speakerPin, 261); delay(800);
   tone(speakerPin, 329); delay(300);
   tone(speakerPin, 391); delay(800);
@@ -70,6 +71,7 @@ void schoolBell() {
   tone(speakerPin, 329); delay(500);
   tone(speakerPin, 261); delay(300);
   noTone(speakerPin);
+  Serial.println("schoolBell ended");  // Notify that the function has ended
 }
 
 void updateDateTime(const Time& t) {
@@ -92,5 +94,5 @@ void updateDateTime(const Time& t) {
     lcd.setCursor(0, 1);
     lcd.print(timeBuffer);
   }
-  lastMinute = t.min;  // Update previous minute
+  lastMinute = t.min;  // Update the last minute
 }
