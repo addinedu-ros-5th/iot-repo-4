@@ -14,11 +14,6 @@ int lastYear = -1;
 int speakerPin = 7;
 int numTones = 7;
 
-// Shift register pins
-int latch = 8;
-int clock = 9;
-int data = 10;
-
 void setup() {
   Serial.begin(9600);
   pinMode(latch, OUTPUT);
@@ -40,39 +35,9 @@ void loop() {
     schoolBell();  // Ring the bell at the start of each hour
   }
 
-  if (Serial.available() > 0) {
-    char receivedChar = Serial.read();  // Read from serial input
-    if (receivedChar == 's') {
-      schoolBell();  // Ring the bell when 's' is entered
-    }
-  }
-
-  digitalWrite(latch, LOW);
-  shiftOut(data, clock, MSBFIRST, B11111111);
-  digitalWrite(latch, HIGH);
   delay(200);  // Delay to refresh time display
 }
 
-void schoolBell() {
-  Serial.println("schoolBell started");  // Notify that the function has started
-  tone(speakerPin, 261); delay(800);
-  tone(speakerPin, 329); delay(300);
-  tone(speakerPin, 391); delay(800);
-  tone(speakerPin, 440); delay(250);
-  tone(speakerPin, 391); delay(300);
-  tone(speakerPin, 349); delay(300);
-  tone(speakerPin, 440); delay(300);
-  tone(speakerPin, 391); delay(800);
-  tone(speakerPin, 349); delay(800);
-  tone(speakerPin, 391); delay(300);
-  tone(speakerPin, 329); delay(800);
-  tone(speakerPin, 261); delay(300);
-  tone(speakerPin, 294); delay(500);
-  tone(speakerPin, 329); delay(500);
-  tone(speakerPin, 261); delay(300);
-  noTone(speakerPin);
-  Serial.println("schoolBell ended");  // Notify that the function has ended
-}
 
 void updateDateTime(const Time& t) {
   if (lastYear != t.yr || lastMonth != t.mon || lastDate != t.date) {
