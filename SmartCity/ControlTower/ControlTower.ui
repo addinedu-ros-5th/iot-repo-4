@@ -6,241 +6,222 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>512</width>
-    <height>324</height>
+    <width>680</width>
+    <height>352</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QGroupBox" name="SL_groupBox">
+  <widget class="QSplitter" name="splitter_4">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>10</y>
-     <width>111</width>
-     <height>141</height>
+     <y>20</y>
+     <width>651</width>
+     <height>151</height>
     </rect>
    </property>
-   <property name="font">
-    <font>
-     <family>Ubuntu</family>
-    </font>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
    </property>
-   <property name="title">
-    <string>Street Lamp</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
-   </property>
-   <widget class="QRadioButton" name="slBtn1">
-    <property name="geometry">
-     <rect>
-      <x>12</x>
-      <y>32</y>
-      <width>62</width>
-      <height>20</height>
-     </rect>
+   <widget class="QGroupBox" name="SL_groupBox">
+    <property name="font">
+     <font>
+      <family>Ubuntu</family>
+     </font>
     </property>
-    <property name="text">
-     <string>위치1</string>
+    <property name="title">
+     <string>Street Lamp</string>
     </property>
+    <property name="alignment">
+     <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+    </property>
+    <widget class="QSplitter" name="splitter_3">
+     <property name="geometry">
+      <rect>
+       <x>12</x>
+       <y>30</y>
+       <width>161</width>
+       <height>111</height>
+      </rect>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <widget class="QSplitter" name="splitter">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <widget class="QLabel" name="schoolLabel">
+       <property name="text">
+        <string>학교</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="aptLabel">
+       <property name="text">
+        <string>아파트</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="parkLabel">
+       <property name="text">
+        <string>공원</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="stationLabel">
+       <property name="text">
+        <string>정류장</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QSplitter" name="splitter_2">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <widget class="QPushButton" name="pushButton">
+       <property name="text">
+        <string>Light</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pushButton_2">
+       <property name="text">
+        <string>Light</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pushButton_3">
+       <property name="text">
+        <string>Light</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pushButton_4">
+       <property name="text">
+        <string>Light</string>
+       </property>
+      </widget>
+     </widget>
+    </widget>
    </widget>
-   <widget class="QRadioButton" name="slBtn2">
-    <property name="geometry">
-     <rect>
-      <x>12</x>
-      <y>58</y>
-      <width>62</width>
-      <height>20</height>
-     </rect>
+   <widget class="QGroupBox" name="GPS_groupBox">
+    <property name="title">
+     <string>Station</string>
     </property>
-    <property name="text">
-     <string>위치2</string>
-    </property>
+    <widget class="QSplitter" name="splitter_7">
+     <property name="geometry">
+      <rect>
+       <x>12</x>
+       <y>32</y>
+       <width>201</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <widget class="QLabel" name="busLabel">
+      <property name="text">
+       <string>Bus Station</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="busEdit"/>
+     <widget class="QLabel" name="gtLabel">
+      <property name="text">
+       <string>Garbage Truck Station</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="gtEdit"/>
+    </widget>
    </widget>
-   <widget class="QRadioButton" name="slBtn3">
-    <property name="geometry">
-     <rect>
-      <x>12</x>
-      <y>84</y>
-      <width>62</width>
-      <height>19</height>
-     </rect>
+   <widget class="QGroupBox" name="SM_groupBox">
+    <property name="title">
+     <string>Speed Measurement</string>
     </property>
-    <property name="text">
-     <string>위치3</string>
-    </property>
-   </widget>
-   <widget class="QRadioButton" name="slBtn4">
-    <property name="geometry">
-     <rect>
-      <x>12</x>
-      <y>109</y>
-      <width>62</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>위치4</string>
-    </property>
+    <widget class="QLineEdit" name="speedEdit">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>50</y>
+       <width>181</width>
+       <height>31</height>
+      </rect>
+     </property>
+    </widget>
    </widget>
   </widget>
-  <widget class="QGroupBox" name="OISL_groupBox">
+  <widget class="QSplitter" name="splitter_5">
    <property name="geometry">
     <rect>
-     <x>300</x>
-     <y>160</y>
-     <width>201</width>
-     <height>143</height>
+     <x>120</x>
+     <y>180</y>
+     <width>391</width>
+     <height>161</height>
     </rect>
    </property>
-   <property name="title">
-    <string>Offensive Index Signal Light</string>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
    </property>
-   <layout class="QGridLayout" name="gridLayout">
-    <item row="1" column="0">
-     <widget class="QRadioButton" name="YellowBtn">
-      <property name="text">
-       <string>황색</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="0">
-     <widget class="QRadioButton" name="greenBtn">
-      <property name="text">
-       <string>녹색</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="0">
+   <widget class="QGroupBox" name="P_groupBox">
+    <property name="title">
+     <string>Park</string>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_2">
+     <item row="0" column="0">
+      <widget class="QLabel" name="clockLabel">
+       <property name="text">
+        <string>Clock</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QDateTimeEdit" name="clockEdit"/>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="trashLabel">
+       <property name="text">
+        <string>Trash Can Condtion</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QProgressBar" name="trashProgressBar">
+       <property name="value">
+        <number>24</number>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QGroupBox" name="OISL_groupBox">
+    <property name="title">
+     <string>Offensive Index Signal Light</string>
+    </property>
+    <widget class="QSplitter" name="splitter_6">
+     <property name="geometry">
+      <rect>
+       <x>12</x>
+       <y>24</y>
+       <width>121</width>
+       <height>121</height>
+      </rect>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
      <widget class="QRadioButton" name="redBtn">
       <property name="text">
-       <string>적색</string>
+       <string>불쾌한 상태</string>
       </property>
      </widget>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QGroupBox" name="GPS_groupBox">
-   <property name="geometry">
-    <rect>
-     <x>140</x>
-     <y>10</y>
-     <width>191</width>
-     <height>144</height>
-    </rect>
-   </property>
-   <property name="title">
-    <string>GPS</string>
-   </property>
-   <widget class="QLabel" name="gtLabel">
-    <property name="geometry">
-     <rect>
-      <x>12</x>
-      <y>84</y>
-      <width>171</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Garbage Truck Location</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="gtEdit">
-    <property name="geometry">
-     <rect>
-      <x>12</x>
-      <y>107</y>
-      <width>161</width>
-      <height>25</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="busLabel">
-    <property name="geometry">
-     <rect>
-      <x>12</x>
-      <y>32</y>
-      <width>87</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Bus Location</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="busEdit">
-    <property name="geometry">
-     <rect>
-      <x>12</x>
-      <y>53</y>
-      <width>161</width>
-      <height>25</height>
-     </rect>
-    </property>
-   </widget>
-  </widget>
-  <widget class="QGroupBox" name="P_groupBox">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>160</y>
-     <width>271</width>
-     <height>147</height>
-    </rect>
-   </property>
-   <property name="title">
-    <string>Park</string>
-   </property>
-   <layout class="QGridLayout" name="gridLayout_2">
-    <item row="0" column="0">
-     <widget class="QLabel" name="clockLabel">
+     <widget class="QRadioButton" name="YellowBtn">
       <property name="text">
-       <string>Clock</string>
+       <string>불편한 상태</string>
       </property>
      </widget>
-    </item>
-    <item row="1" column="0">
-     <widget class="QDateTimeEdit" name="clockEdit"/>
-    </item>
-    <item row="2" column="0">
-     <widget class="QLabel" name="trashLabel">
+     <widget class="QRadioButton" name="greenBtn">
       <property name="text">
-       <string>Trash Can Condtion</string>
+       <string>평온한 상태</string>
       </property>
      </widget>
-    </item>
-    <item row="3" column="0">
-     <widget class="QProgressBar" name="trashProgressBar">
-      <property name="value">
-       <number>24</number>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QGroupBox" name="SM_groupBox">
-   <property name="geometry">
-    <rect>
-     <x>350</x>
-     <y>10</y>
-     <width>151</width>
-     <height>141</height>
-    </rect>
-   </property>
-   <property name="title">
-    <string>Speed Measurement</string>
-   </property>
-   <widget class="QLineEdit" name="speedEdit">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>70</y>
-      <width>127</width>
-      <height>25</height>
-     </rect>
-    </property>
+    </widget>
    </widget>
   </widget>
  </widget>
