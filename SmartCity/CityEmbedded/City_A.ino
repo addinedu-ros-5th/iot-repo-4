@@ -19,6 +19,24 @@ int latch = 8;
 int clock = 9;
 int data = 10;
 
+//앞 네자리:아파트 | 뒤 네자리:가로등 | 1:On | 0:Off
+byte LED_patterns[] = {
+  B11111111,
+  B11110000,
+  B11111000,
+  B11110100,
+  B11110010,
+  B11110001,
+  B11111100,
+  B11110110,
+  B11110011,
+  B11111001,
+  B11110111,
+  B11111011,
+  B11111101,
+  B11111110,
+};
+
 void setup() {
   Serial.begin(9600);
   pinMode(latch, OUTPUT);
@@ -28,7 +46,7 @@ void setup() {
   lcd.backlight();
   rtc.writeProtect(false);
   rtc.halt(false);
-  Time datetime(2024, 4, 22, 19, 59, 57, 1);  // Set initial date and time
+  Time datetime(2024, 4, 25, 15, 00, 00, 5);  // Set initial date and time
   rtc.time(datetime);
   lcd.clear();
 }
@@ -45,10 +63,48 @@ void loop() {
     if (receivedChar == 's') {
       schoolBell();  // Ring the bell when 's' is entered
     }
+    else if (receivedChar == '0') {
+      updateShiftRegister(LED_patterns[0]); //All On
+    }
+    else if (receivedChar == '1') {
+      updateShiftRegister(LED_patterns[1]); //All Off
+    }
+    else if (receivedChar == '2') {
+      updateShiftRegister(LED_patterns[2]); //LED1 On
+    }
+    else if (receivedChar == '3') {
+      updateShiftRegister(LED_patterns[3]); //LED2 On
+    }
+    else if (receivedChar == '4') {
+      updateShiftRegister(LED_patterns[4]); //LED3 On
+    }
+    else if (receivedChar == '5') {
+      updateShiftRegister(LED_patterns[5]); //LED4 On
+    }
+    else if (receivedChar == '6') {
+      updateShiftRegister(LED_patterns[6]); //LED1,2 On
+    }
+    else if (receivedChar == '7') {
+      updateShiftRegister(LED_patterns[7]); //LED2,3 On
+    }
+    else if (receivedChar == '8') {
+      updateShiftRegister(LED_patterns[8]); //LED3,4 On
+    }
+    else if (receivedChar == '9') {
+      updateShiftRegister(LED_patterns[9]); //LED4,1 On
+    }
+    else if (receivedChar == 'a') {
+      updateShiftRegister(LED_patterns[10]); //LED1,2,3 On
+    }
+    else if (receivedChar == 'b') {
+      updateShiftRegister(LED_patterns[11]); //LED2,3,4 On
+    }
+    else if (receivedChar == 'c') {
+      updateShiftRegister(LED_patterns[12]); //LED4,1,2 On
+    }
   }
 
   digitalWrite(latch, LOW);
-  shiftOut(data, clock, MSBFIRST, B11111111);
   digitalWrite(latch, HIGH);
   delay(200);  // Delay to refresh time display
 }
@@ -72,6 +128,12 @@ void schoolBell() {
   tone(speakerPin, 261); delay(300);
   noTone(speakerPin);
   Serial.println("schoolBell ended");  // Notify that the function has ended
+}
+
+void updateShiftRegister(byte pattern) {
+  digitalWrite(latch, LOW);
+  shiftOut(data, clock, MSBFIRST, pattern);
+  digitalWrite(latch, HIGH);
 }
 
 void updateDateTime(const Time& t) {
