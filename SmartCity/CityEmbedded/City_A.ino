@@ -1,10 +1,8 @@
 #include <DS1302.h>
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
-
 LiquidCrystal_I2C lcd(0x27, 16, 2);  // Initialize the LCD
 DS1302 rtc(2, 4, 5);  // Initialize the RTC (Real Time Clock)
-
 int lastSecond = -1;
 int lastMinute = -1;
 int lastHour = -1;
@@ -13,29 +11,30 @@ int lastMonth = -1;
 int lastYear = -1;
 int speakerPin = 7;
 int numTones = 7;
-
 // Shift register pins
 int latch = 8;
 int clock = 9;
 int data = 10;
-
-//앞 네자리:아파트 | 뒤 네자리:가로등 | 1:On | 0:Off
-byte LED_patterns[] = {
-  B11111111,
-  B11110000,
+//1~4 digit:Aprtment Light | 5~8 digit:Street Lamp | 1:On | 0:Off
+byte LED_ON[] = {
   B11111000,
   B11110100,
   B11110010,
-  B11110001,
-  B11111100,
-  B11110110,
-  B11110011,
-  B11111001,
+  B11110001
+};
+byte LED_OFF[] = {
   B11110111,
   B11111011,
   B11111101,
-  B11111110,
+  B11111110
 };
+
+byte currentLedStatus = B11110000;
+
+bool light1 = false;
+bool light2 = false;
+bool light3 = false;
+bool light4 = false;
 
 void setup() {
   Serial.begin(9600);
@@ -49,66 +48,80 @@ void setup() {
   Time datetime(2024, 4, 25, 15, 00, 00, 5);  // Set initial date and time
   rtc.time(datetime);
   lcd.clear();
+  updateShiftRegister(currentLedStatus);
 }
-
 void loop() {
   Time t = rtc.time();
   updateDateTime(t);
   if (t.sec == 0 && lastMinute != t.min) {  // Check if it's the top of the hour
     schoolBell();  // Ring the bell at the start of each hour
   }
-
   if (Serial.available() > 0) {
     char receivedChar = Serial.read();  // Read from serial input
     if (receivedChar == 's') {
       schoolBell();  // Ring the bell when 's' is entered
     }
-    else if (receivedChar == '0') {
-      updateShiftRegister(LED_patterns[0]); //All On
-    }
     else if (receivedChar == '1') {
-      updateShiftRegister(LED_patterns[1]); //All Off
+      if (light1 == false)
+      {
+        updateShiftRegister(currentLedStatus | LED_ON[0]); //LED1 On
+        currentLedStatus = currentLedStatus | LED_ON[0];
+        light1 = true;
+      }
+      else
+      {
+        updateShiftRegister(currentLedStatus & LED_OFF[0]); //LED1 On
+        currentLedStatus = currentLedStatus & LED_OFF[0];
+        light1 = false;
+      }
     }
     else if (receivedChar == '2') {
-      updateShiftRegister(LED_patterns[2]); //LED1 On
+      if (light2 == false)
+      {
+        updateShiftRegister(currentLedStatus | LED_ON[1]); //LED2 On
+        currentLedStatus = currentLedStatus | LED_ON[1];
+        light2 = true;
+      }
+      else
+      {
+        updateShiftRegister(currentLedStatus & LED_OFF[1]); //LED2 On
+        currentLedStatus = currentLedStatus & LED_OFF[1];
+        light2 = false;
+      }
     }
     else if (receivedChar == '3') {
-      updateShiftRegister(LED_patterns[3]); //LED2 On
+      if (light3 == false)
+      {
+        updateShiftRegister(currentLedStatus | LED_ON[2]); //LED3 On
+        currentLedStatus = currentLedStatus | LED_ON[2];
+        light3 = true;
+      }
+      else
+      {
+        updateShiftRegister(currentLedStatus & LED_OFF[2]); //LED3 On
+        currentLedStatus = currentLedStatus & LED_OFF[2];
+        light3 = false;
+      }
     }
     else if (receivedChar == '4') {
-      updateShiftRegister(LED_patterns[4]); //LED3 On
-    }
-    else if (receivedChar == '5') {
-      updateShiftRegister(LED_patterns[5]); //LED4 On
-    }
-    else if (receivedChar == '6') {
-      updateShiftRegister(LED_patterns[6]); //LED1,2 On
-    }
-    else if (receivedChar == '7') {
-      updateShiftRegister(LED_patterns[7]); //LED2,3 On
-    }
-    else if (receivedChar == '8') {
-      updateShiftRegister(LED_patterns[8]); //LED3,4 On
-    }
-    else if (receivedChar == '9') {
-      updateShiftRegister(LED_patterns[9]); //LED4,1 On
-    }
-    else if (receivedChar == 'a') {
-      updateShiftRegister(LED_patterns[10]); //LED1,2,3 On
-    }
-    else if (receivedChar == 'b') {
-      updateShiftRegister(LED_patterns[11]); //LED2,3,4 On
-    }
-    else if (receivedChar == 'c') {
-      updateShiftRegister(LED_patterns[12]); //LED4,1,2 On
+      if (light4 == false)
+      {
+        updateShiftRegister(currentLedStatus | LED_ON[3]); //LED4 On
+        currentLedStatus = currentLedStatus | LED_ON[3];
+        light4 = true;
+      }
+      else
+      {
+        updateShiftRegister(currentLedStatus & LED_OFF[3]); //LED4 On
+        currentLedStatus = currentLedStatus & LED_OFF[3];
+        light4 = false;
+      }
     }
   }
-
   digitalWrite(latch, LOW);
   digitalWrite(latch, HIGH);
   delay(200);  // Delay to refresh time display
 }
-
 void schoolBell() {
   Serial.println("schoolBell started");  // Notify that the function has started
   tone(speakerPin, 261); delay(800);
@@ -129,13 +142,11 @@ void schoolBell() {
   noTone(speakerPin);
   Serial.println("schoolBell ended");  // Notify that the function has ended
 }
-
 void updateShiftRegister(byte pattern) {
   digitalWrite(latch, LOW);
   shiftOut(data, clock, MSBFIRST, pattern);
   digitalWrite(latch, HIGH);
 }
-
 void updateDateTime(const Time& t) {
   if (lastYear != t.yr || lastMonth != t.mon || lastDate != t.date) {
     lastYear = t.yr;
@@ -146,7 +157,6 @@ void updateDateTime(const Time& t) {
     lcd.setCursor(0, 0);
     lcd.print(dateBuffer);
   }
-
   if (lastHour != t.hr || lastMinute != t.min || lastSecond != t.sec) {
     lastHour = t.hr;
     lastMinute = t.min;
