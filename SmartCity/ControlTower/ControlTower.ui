@@ -78,22 +78,22 @@
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
-      <widget class="QPushButton" name="pushButton">
+      <widget class="QPushButton" name="schoolBtn">
        <property name="text">
         <string>Light</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="pushButton_2">
+      <widget class="QPushButton" name="aptBtn">
        <property name="text">
         <string>Light</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="pushButton_3">
+      <widget class="QPushButton" name="parkBtn">
        <property name="text">
         <string>Light</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="pushButton_4">
+      <widget class="QPushButton" name="stationBtn">
        <property name="text">
         <string>Light</string>
        </property>

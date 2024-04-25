@@ -2,9 +2,9 @@ import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5 import uic
-import mysql.connector
+import serial
 
-from_class = uic.loadUiType("ControlTower.ui")[0]
+from_class = uic.loadUiType("src/ControlTower.ui")[0]
 
 class WindowClass(QMainWindow, from_class):
     def __init__(self):
@@ -12,43 +12,16 @@ class WindowClass(QMainWindow, from_class):
         self.setupUi(self)
         self.setWindowTitle("Control Tower")
         
-        self.conn = self.connection()
-        self.rcvLocation()
+        self.conn = serial.Serial(port='/dev/ttyACM0', baudrate=9600, timeout=1)
 
-    def connection(self):
-        conn = mysql.connector.connect(
-            host = "smartcity.cdv9nppqt3kw.ap-northeast-2.rds.amazonaws.com",
-            user = "dev",
-            port = 3306,
-            password = "0423",
-            database = "SmartCity"
-        )
-        return conn
-
-
-    def rcvLocation(self):
-        cur = self.conn.cursor(buffered=True)
-        cur.execute("SELECT 위치 FROM TestDB")
+        self.aptBtn.clicked.connect(lambda: self.sendData(b'3'))
+        self.parkBtn.clicked.connect(lambda: self.sendData(b'2'))
+        self.schoolBtn.clicked.connect(lambda: self.sendData(b'4'))
+        self.stationBtn.clicked.connect(lambda: self.sendData(b'1'))
         
-        result = cur.fetchone()
-        result = result[0]
-        
-        self.conn.close()
-        # 버스 위치 받아오는 함수 작성
-        self.busEdit.setText("")
-        # 쓰레기 수거 차량 위치 받아오는 함수 작성
-        self.gtEdit.setText("")
-
-    def rcvLight(self):
-        # 적색 신호등 상태 받아오는 함수 작성
-        self.redBtn.setChecked(True)
-        self.redBtn.setChecked(False)
-        # 황색 신호등 상태 받아오는 함수 작성
-        self.yellowBtn.setChecked(True)
-        self.yellowBtn.setChecked(False)
-        # 녹색 신호등 상태 받아오는 함수 작성
-        self.greenBtn.setChecked(True)
-        self.greenBtn.setChecked(False)
+    def sendData(self, data):
+        self.conn.write(data)
+    
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
