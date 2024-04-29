@@ -113,41 +113,39 @@ Implementation of a smart city centered on bus and garbage truck services by con
     - 스텝 모터 동작으로 인해 예상했던 것에 비해 많은 전원 필요
 
 ### Trash can flow chart 
-![image]()
+![image](https://github.com/addinedu-ros-5th/iot-repo-4/assets/70615068/b26a4df3-e434-4e82-9010-e9b871cd4e8c)
 
 ### Trash can error case
 1. 시간 문제
-    - 프로젝트 기간내 구현 미달성
+    - 프로젝트 기간내 미완
 
 ### Speed enforcement flow chart 
-![image]()
+![image](https://github.com/addinedu-ros-5th/iot-repo-4/assets/70615068/bf02d02e-9635-44cd-9cdd-434935b2da36)
 
 ### Speed enforcement error case
 1. 속도 측정 정확성 문제
     - 속도 측정 및 계산 과정에서 예외처리가 덜 되어 부정확한 결과 도출
 
 ### Clock Tower flow chart 
-![image]()
+![image](https://github.com/addinedu-ros-5th/iot-repo-4/assets/70615068/e7317ea0-aeee-47ec-9ca4-648a0f2a0ca3)
 
 
 ### School bell flow chart 
-![image]()
+![image](https://github.com/addinedu-ros-5th/iot-repo-4/assets/70615068/705a78c2-b55a-4cbf-9a31-2ec23dda681a)
 
 ### Street lamp & Apartment light flow chart 
-![image]()
+![image](https://github.com/addinedu-ros-5th/iot-repo-4/assets/70615068/15694d15-3d3a-4e69-af9c-60ca23572444)
 
 
 ### Discomfort index flow chart 
-![image]()
+![image](https://github.com/addinedu-ros-5th/iot-repo-4/assets/70615068/15d3fd7c-4224-4614-9faa-17967eb81598)
 
 ### Discomfort index error case
 1. 전원 인가 문제
     - +, - 전원 구분 : Cathod, Anode 구분을 하지 않고 전원을 인가하여 작업에 차질
 
-### Data base
-![image]()
 ### GUI
-![image]()
+![image](https://github.com/addinedu-ros-5th/iot-repo-4/assets/70615068/b05138cc-f6c6-49f0-85c5-87f4e1c49895)
 
 ## Verification
 |UR number|SR number|Function|Description|P/NP|
@@ -167,17 +165,19 @@ Implementation of a smart city centered on bus and garbage truck services by con
 |SR_S_01|S_TC_01|종소리 기능|수업 시작을 알리는 소리를 재생한다.|P|
 |SR_C_01|C_TC_01|시간 표시 기능|현재 시간을 표시한다.|P|
 |SR_A_01|A_TC_01|조명 기능|상시 활성화된 조명을 유지한다.|P|
-|CT-1|GUI-B-1|버스의 실시간 위치를 표시한다.|NP|
-|CT-2|GUI-GT-1|쓰레기 수거 차량의 실시간 위치를 표시한다.|NP|
-|CT-3|GUI-DI-1|불쾌지수 신호등의 상태를 표시한다.|NP|
-|CT-4|GUI-SL-1|장소별 가로등을 제어한다.|P|
-|CT-5|GUI-T-1|쓰레기통의 채워짐 상태를 표시한다.|NP|
-|CT-5|GUI-SC-1|지나가는 차량의 측정된 속도를 표시한다.|NP|
+|CT-1|GUI-B-1|버스 위치 표시 기능|버스의 실시간 위치를 표시한다.|NP|
+|CT-2|GUI-GT-1|쓰레기차 위치 표시기능|쓰레기 수거 차량의 실시간 위치를 표시한다.|NP|
+|CT-3|GUI-DI-1|신호등 상태 표시 기능|불쾌지수 신호등의 상태를 표시한다.|NP|
+|CT-4|GUI-SL-1|가로등 제어기능|장소별 가로등을 제어한다.|P|
+|CT-5|GUI-T-1|쓰레기통 상태 표시 기능|쓰레기통의 채워짐 상태를 표시한다.|NP|
+|CT-5|GUI-SC-1|속도 표시 기능|지나가는 차량의 측정된 속도를 표시한다.|NP|
 
 ## Demonstation
-### Bus
+### Bus service
+https://drive.google.com/file/d/1TuCGNl52vYhs8kNk3kZVGenUzQXJIqdH/view?usp=sharing
 
-### Garbage truck
+### Garbage service
+https://drive.google.com/file/d/1eJfoXkU7-yL1qbn8B0kzaFt5K2g6Cxdg/view?usp=sharing
 
 ### GUI - Street lamp control
-
+https://drive.google.com/file/d/1LBMFSts0QBAFbuMC3PcCRIBle0IduBIh/view?usp=sharing
